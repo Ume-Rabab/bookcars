@@ -54,14 +54,14 @@ export const expireAt = 'expireAt'
  *
  * @type {string}
  */
-export const WEBSITE_NAME = __env__('BC_WEBSITE_NAME', false, 'BookCars')
+export const WEBSITE_NAME = __env__('BC_WEBSITE_NAME', false, 'SafarRent')
 
 /**
  * Base currency. Default is USD.
  *
  * @type {string}
  */
-export const BASE_CURRENCY = __env__('BC_BASE_CURRENCY', false, 'USD')
+export const BASE_CURRENCY = __env__('BC_BASE_CURRENCY', false, 'PKR')
 
 /**
  * Indicate whether we are in CI environment or not.
@@ -482,7 +482,7 @@ export const RECAPTCHA_REQUIRED = process.env.NODE_ENV === 'production'
  *
  * @type {string}
  */
-export const TIMEZONE = __env__('BC_TIMEZONE', false, 'UTC')
+export const TIMEZONE = __env__('BC_TIMEZONE', false, 'Asia/Karachi')
 
 /**
  * ipinfo.io API key.
@@ -497,7 +497,7 @@ export const IPINFO_API_KEY = __env__('BC_IPINFO_API_KEY', false)
  *
  * @type {string}
  */
-export const IPINFO_DEFAULT_COUNTRY = __env__('BC_IPINFO_DEFAULT_COUNTRY', false, 'US')
+export const IPINFO_DEFAULT_COUNTRY = __env__('BC_IPINFO_DEFAULT_COUNTRY', false, 'PK')
 
 /**
  * Enables or disables Sentry error reporting. Set to true to enable.

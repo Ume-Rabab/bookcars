@@ -44,7 +44,7 @@ const env = {
   isMobile: window.innerWidth <= 960,
   isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
 
-  WEBSITE_NAME: String(import.meta.env.VITE_BC_WEBSITE_NAME),
+  WEBSITE_NAME: String(import.meta.env.VITE_BC_WEBSITE_NAME || 'SafarRent'),
 
   APP_TYPE: bookcarsTypes.AppType.Admin,
   API_HOST: String(import.meta.env.VITE_BC_API_HOST),
@@ -82,7 +82,9 @@ const env = {
     (import.meta.env.VITE_BC_PAGINATION_MODE && import.meta.env.VITE_BC_PAGINATION_MODE.toUpperCase()) === Const.PAGINATION_MODE.INFINITE_SCROLL
       ? Const.PAGINATION_MODE.INFINITE_SCROLL
       : Const.PAGINATION_MODE.CLASSIC,
-  CURRENCY: import.meta.env.VITE_BC_CURRENCY || '$',
+  CURRENCY: import.meta.env.VITE_BC_CURRENCY || 'PKR',
+  COUNTRY: import.meta.env.VITE_BC_COUNTRY || 'Pakistan',
+  TIMEZONE: import.meta.env.VITE_BC_TIMEZONE || 'Asia/Karachi',
   DEPOSIT_FILTER_VALUE_1: Number.parseInt(String(import.meta.env.VITE_BC_DEPOSIT_FILTER_VALUE_1), 10),
   DEPOSIT_FILTER_VALUE_2: Number.parseInt(String(import.meta.env.VITE_BC_DEPOSIT_FILTER_VALUE_2), 10),
   DEPOSIT_FILTER_VALUE_3: Number.parseInt(String(import.meta.env.VITE_BC_DEPOSIT_FILTER_VALUE_3), 10),
