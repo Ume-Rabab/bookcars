@@ -1,6 +1,15 @@
 FROM node:lts-alpine AS packages
 WORKDIR /bookcars/packages
 
+ENV NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ \
+    NPM_CONFIG_FETCH_RETRIES=8 \
+    NPM_CONFIG_FETCH_RETRY_FACTOR=2 \
+    NPM_CONFIG_FETCH_RETRY_MINTIMEOUT=20000 \
+    NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT=180000 \
+    NPM_CONFIG_FETCH_TIMEOUT=1200000 \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false
+
 COPY ./packages /bookcars/packages
 
 # Install dependencies for all internal packages
@@ -9,7 +18,7 @@ RUN set -e && \
   -exec sh -c 'for dir; do \
     if [ -f "$dir/package.json" ]; then \
       echo "Installing dependencies in $dir"; \
-      npm --prefix "$dir" install; \
+      npm --prefix "$dir" install --no-audit --no-fund; \
     fi; \
   done' _ {} +
 
@@ -17,8 +26,17 @@ RUN set -e && \
 FROM node:lts-alpine AS frontend
 WORKDIR /bookcars/frontend
 
+ENV NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ \
+    NPM_CONFIG_FETCH_RETRIES=8 \
+    NPM_CONFIG_FETCH_RETRY_FACTOR=2 \
+    NPM_CONFIG_FETCH_RETRY_MINTIMEOUT=20000 \
+    NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT=180000 \
+    NPM_CONFIG_FETCH_TIMEOUT=1200000 \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false
+
 COPY ./frontend/package*.json ./
-RUN npm install --force && npm cache clean --force
+RUN npm install --force --no-audit --no-fund && npm cache clean --force
 
 COPY ./frontend ./ 
 COPY ./frontend/.env.docker .env
