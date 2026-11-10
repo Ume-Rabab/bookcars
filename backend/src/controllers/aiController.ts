@@ -71,8 +71,8 @@ export const approveAudit = async (req: Request, res: Response) => {
     res.status(404).json({ message: 'AI request not found' })
     return
   }
-  if (audit.approvalStatus === 'booking_created') {
-    res.status(409).json({ message: 'This AI request has already created a booking' })
+  if (!['extracted', 'needs_correction'].includes(audit.approvalStatus)) {
+    res.status(409).json({ message: 'This AI request is not awaiting approval' })
     return
   }
   const correctedData = req.body?.correctedData
@@ -92,6 +92,27 @@ export const approveAudit = async (req: Request, res: Response) => {
   audit.correctedData = correctedData
   audit.approvedBy = new mongoose.Types.ObjectId(req.user._id)
   audit.approvalStatus = 'approved'
+  await audit.save()
+  res.json(audit)
+}
+
+export const rejectAudit = async (req: Request, res: Response) => {
+  const auditId = String(req.params.id)
+  if (!helper.isValidObjectId(auditId)) {
+    res.status(400).json({ message: 'Invalid audit ID' })
+    return
+  }
+  const audit = await BookingIntakeAudit.findById(auditId)
+  if (!audit) {
+    res.status(404).json({ message: 'AI request not found' })
+    return
+  }
+  if (!['extracted', 'needs_correction'].includes(audit.approvalStatus)) {
+    res.status(409).json({ message: 'This AI request is not awaiting review' })
+    return
+  }
+  audit.approvalStatus = 'rejected'
+  audit.failureReason = typeof req.body?.reason === 'string' ? req.body.reason.trim().slice(0, 500) : 'Rejected by operator'
   await audit.save()
   res.json(audit)
 }

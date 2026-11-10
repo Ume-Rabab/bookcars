@@ -17,3 +17,6 @@ export const getAudits = (page: number, size = env.PAGE_SIZE): Promise<Array<{ r
 
 export const approveAudit = (id: string, correctedData: bookcarsTypes.BookingIntakeData): Promise<bookcarsTypes.BookingIntakeAudit> =>
   axiosInstance.post(`/api/ai/booking-intake-audits/${encodeURIComponent(id)}/approve`, { correctedData }, { withCredentials: true }).then((res) => res.data)
+
+export const rejectAudit = (id: string, reason: string): Promise<bookcarsTypes.BookingIntakeAudit> =>
+  axiosInstance.post(`/api/ai/booking-intake-audits/${encodeURIComponent(id)}/reject`, { reason }, { withCredentials: true }).then((res) => res.data)
