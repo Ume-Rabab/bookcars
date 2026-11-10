@@ -1,0 +1,37 @@
+div.maintenance-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+div.maintenance-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+div.maintenance-form .MuiButton-root {
+  width: fit-content;
+}
+
+div.maintenance-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 2fr 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e0e0e0;
+  text-transform: capitalize;
+}
+
+@media only screen and (width <= 700px) {
+  div.maintenance-form {
+    grid-template-columns: 1fr;
+  }
+
+  div.maintenance-row {
+    grid-template-columns: 1fr;
+  }
+}
