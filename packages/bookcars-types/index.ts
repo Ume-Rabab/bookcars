@@ -700,6 +700,21 @@ export interface Maintenance {
   updatedAt?: Date
 }
 
+export type VehicleDocumentType = 'registration' | 'insurance' | 'token_tax' | 'fitness_certificate' | 'driver_license'
+export type VehicleDocumentStatus = 'pending' | 'verified' | 'expired'
+
+export interface VehicleDocument {
+  _id?: string
+  vehicle?: string
+  driver?: string
+  type: VehicleDocumentType
+  expiryDate: Date
+  status: VehicleDocumentStatus
+  notes?: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
 // 
 // React types
 //

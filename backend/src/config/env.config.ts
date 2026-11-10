@@ -972,6 +972,18 @@ export interface Maintenance extends Document {
   updatedAt: Date
 }
 
+export interface VehicleDocument extends Document {
+  _id: Types.ObjectId
+  vehicle?: Types.ObjectId
+  driver?: Types.ObjectId
+  type: bookcarsTypes.VehicleDocumentType
+  expiryDate: Date
+  status: bookcarsTypes.VehicleDocumentStatus
+  notes?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 /**
  * NotificationCounter Document.
  *

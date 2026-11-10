@@ -342,6 +342,9 @@ const Car = () => {
                 <Button variant="outlined" className="btn-margin btn-margin-bottom" size="small" onClick={() => navigate(`/maintenance?cr=${car._id}`)}>
                   Maintenance
                 </Button>
+                <Button variant="outlined" className="btn-margin btn-margin-bottom" size="small" onClick={() => navigate(`/vehicle-documents?cr=${car._id}`)}>
+                  Documents
+                </Button>
                 <Button variant="contained" className="btn-margin-bottom" color="error" size="small" onClick={handleDelete}>
                   {commonStrings.DELETE}
                 </Button>
