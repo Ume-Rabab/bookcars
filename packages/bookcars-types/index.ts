@@ -642,6 +642,43 @@ export interface UpdateSettingsPayload {
   maxPickupDropoffHour: number
 }
 
+export type BookingIntakeAuditStatus = 'extracted' | 'needs_correction' | 'approved' | 'rejected' | 'booking_created' | 'failed'
+
+export interface BookingIntakeData {
+  rentalType: string | null
+  vehicleCategory: string | null
+  chauffeurRequired: boolean
+  pickupLocation: string | null
+  dropoffLocation: string | null
+  startDate: string | null
+  endDate: string | null
+  passengerCount: number | null
+  extras: string[]
+  paymentMethod: string | null
+  missingFields: string[]
+  ambiguities: string[]
+  confidence: number
+  requiresApproval: true
+}
+
+export interface BookingIntakeAudit {
+  _id: string
+  userId: string
+  originalRequest: string
+  extractedData: BookingIntakeData
+  correctedData?: BookingIntakeData
+  confidence: number
+  missingFields: string[]
+  ambiguities: string[]
+  approvalStatus: BookingIntakeAuditStatus
+  approvedBy?: string
+  createdBookingId?: string
+  provider: string
+  failureReason?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 // 
 // React types
 //

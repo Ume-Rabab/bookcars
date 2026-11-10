@@ -44,6 +44,7 @@ const UpdateCountry = lazy(() => import('@/pages/UpdateCountry'))
 const Scheduler = lazy(() => import('@/pages/Scheduler'))
 const BankDetails = lazy(() => import('@/pages/BankDetails'))
 const Pricing = lazy(() => import('@/pages/Pricing'))
+const AIIntake = lazy(() => import('@/pages/AIIntake'))
 
 const AppLayout = () => {
   const location = useLocation()
@@ -112,6 +113,7 @@ const router = createBrowserRouter([
       { path: 'scheduler', element: <Scheduler /> },
       { path: 'bank-details', element: <BankDetails /> },
       { path: 'pricing', element: <Pricing /> },
+      { path: 'ai-intake', element: <AIIntake /> },
       { path: '*', element: <NoMatch /> }
     ]
   }

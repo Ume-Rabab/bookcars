@@ -34,6 +34,7 @@ import {
   CalendarMonth as SchedulerIcon,
   AccountBalance as BankDetailsIcon,
   MonetizationOn as PricingIcon,
+  AutoAwesome as AIIcon,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import * as bookcarsTypes from ':bookcars-types'
@@ -234,6 +235,15 @@ const Header = ({
         <SettingsIcon className="header-action" />
         <Typography>{strings.SETTINGS}</Typography>
       </MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose()
+          navigate('/ai-intake')
+        }}
+      >
+        <AIIcon className="header-action" />
+        <Typography>AI Booking Intake</Typography>
+      </MenuItem>
       <MenuItem onClick={handleSignout}>
         <SignoutIcon className="header-action" />
         <Typography>{strings.SIGN_OUT}</Typography>
@@ -373,6 +383,15 @@ const Header = ({
                 >
                   <ListItemIcon><PricingIcon /></ListItemIcon>
                   <ListItemText primary={strings.PRICING} />
+                </ListItem>
+                <ListItem
+                  onClick={() => {
+                    navigate('/ai-intake')
+                    handleSideMenuClose()
+                  }}
+                >
+                  <ListItemIcon><AIIcon /></ListItemIcon>
+                  <ListItemText primary="AI Booking Intake" />
                 </ListItem>
                 {bankDetails?.showBankDetailsPage && (
                   <ListItem

@@ -936,6 +936,24 @@ export interface Notification extends Document {
   isRead?: boolean
 }
 
+export interface BookingIntakeAudit extends Document {
+  _id: Types.ObjectId
+  userId: Types.ObjectId
+  originalRequest: string
+  extractedData: bookcarsTypes.BookingIntakeData
+  correctedData?: bookcarsTypes.BookingIntakeData
+  confidence: number
+  missingFields: string[]
+  ambiguities: string[]
+  approvalStatus: bookcarsTypes.BookingIntakeAuditStatus
+  approvedBy?: Types.ObjectId
+  createdBookingId?: Types.ObjectId
+  provider: string
+  failureReason?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 /**
  * NotificationCounter Document.
  *
