@@ -12,8 +12,14 @@ export interface BookingIntakeResponse {
 export const extract = (request: string): Promise<BookingIntakeResponse> =>
   axiosInstance.post('/api/ai/booking-intake', { request }, { withCredentials: true }).then((res) => res.data)
 
-export const getAudits = (page: number, size = env.PAGE_SIZE): Promise<Array<{ resultData: bookcarsTypes.BookingIntakeAudit[], pageInfo: { totalRecords: number }[] }>> =>
-  axiosInstance.get(`/api/ai/booking-intake-audits/${page}/${size}`, { withCredentials: true }).then((res) => res.data)
+export const getAudits = (page: number, size = env.PAGE_SIZE, filters?: { status?: string, bookingId?: string, minConfidence?: number }): Promise<Array<{ resultData: bookcarsTypes.BookingIntakeAudit[], pageInfo: { totalRecords: number }[] }>> => {
+  const params = new URLSearchParams()
+  if (filters?.status) params.set('status', filters.status)
+  if (filters?.bookingId) params.set('bookingId', filters.bookingId)
+  if (filters?.minConfidence !== undefined) params.set('minConfidence', String(filters.minConfidence))
+  const suffix = params.toString() ? `?${params.toString()}` : ''
+  return axiosInstance.get(`/api/ai/booking-intake-audits/${page}/${size}${suffix}`, { withCredentials: true }).then((res) => res.data)
+}
 
 export const approveAudit = (id: string, correctedData: bookcarsTypes.BookingIntakeData): Promise<bookcarsTypes.BookingIntakeAudit> =>
   axiosInstance.post(`/api/ai/booking-intake-audits/${encodeURIComponent(id)}/approve`, { correctedData }, { withCredentials: true }).then((res) => res.data)

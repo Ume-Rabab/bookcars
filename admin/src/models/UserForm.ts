@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import validator from 'validator'
+import { isPakistanPhone } from '@/utils/pakistanValidation'
 import { intervalToDuration } from 'date-fns'
 import * as bookcarsHelper from ':bookcars-helper'
 import { strings as commonStrings } from '@/lang/common'
@@ -8,7 +9,7 @@ import env from '@/config/env.config'
 export const schema = z.object({
   fullName: z.string(),
   email: z.string().email({ message: commonStrings.EMAIL_NOT_VALID }),
-  phone: z.string().refine((val) => !val || validator.isMobilePhone(val), { message: commonStrings.PHONE_NOT_VALID }).optional(),
+  phone: z.string().refine((val) => !val || (isPakistanPhone(val) && validator.isMobilePhone(val)), { message: commonStrings.PHONE_NOT_VALID }).optional(),
   location: z.string().optional(),
   bio: z.string().optional(),
   type: z.enum([...bookcarsHelper.getAllUserTypes()] as [string, ...string[]]),

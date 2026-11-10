@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import validator from 'validator'
+import { isPakistanPhone } from '@/utils/pakistanValidation'
 import { intervalToDuration } from 'date-fns'
 import * as bookcarsHelper from ':bookcars-helper'
 import env from '@/config/env.config'
@@ -23,7 +24,7 @@ export const schema = z.object({
   additionalDriver: z.boolean().default(false).optional(),
   additionalDriverFullName: z.string().optional(),
   additionalDriverEmail: z.string().email({ message: commonStrings.EMAIL_NOT_VALID }).optional().or(z.literal('')),
-  additionalDriverPhone: z.string().refine(val => !val || validator.isMobilePhone(val), {
+  additionalDriverPhone: z.string().refine(val => !val || (isPakistanPhone(val) && validator.isMobilePhone(val)), {
     message: commonStrings.PHONE_NOT_VALID,
   }).optional(),
   additionalDriverBirthDate: z.date().refine((val) => {

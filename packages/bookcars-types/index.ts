@@ -733,6 +733,8 @@ export interface OperationsDashboard {
   }
   bookingStatuses: Array<{ _id: string, count: number }>
   rentalTypes: Array<{ _id?: string, count: number }>
+  maintenanceRows: Array<Record<string, unknown>>
+  documentRows: Array<Record<string, unknown>>
 }
 
 // 

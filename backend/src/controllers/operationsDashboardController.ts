@@ -33,6 +33,8 @@ export const get = async (_req: Request, res: Response) => {
     revenue,
     bookingStatuses,
     rentalTypes,
+    maintenanceRows,
+    documentRows,
   ] = await Promise.all([
     Car.countDocuments(),
     Car.countDocuments({ available: true, fullyBooked: false }),
@@ -55,6 +57,8 @@ export const get = async (_req: Request, res: Response) => {
       { $group: { _id: '$extractedData.rentalType', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ]),
+    Maintenance.find({ status: { $nin: ['completed', 'cancelled'] } }).sort({ expectedCompletionDate: 1 }).limit(10).populate('vehicle', 'name licensePlate').lean(),
+    VehicleDocument.find({ expiryDate: { $lte: soon } }).sort({ expiryDate: 1 }).limit(10).populate('vehicle', 'name licensePlate').lean(),
   ])
 
   res.json({
@@ -75,5 +79,7 @@ export const get = async (_req: Request, res: Response) => {
     },
     bookingStatuses,
     rentalTypes,
+    maintenanceRows,
+    documentRows,
   })
 }

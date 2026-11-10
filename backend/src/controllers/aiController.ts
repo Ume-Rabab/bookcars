@@ -49,7 +49,12 @@ export const getAudits = async (req: Request, res: Response) => {
     res.status(400).json({ message: 'Invalid page or size' })
     return
   }
+  const match: Record<string, unknown> = {}
+  if (typeof req.query.status === 'string' && req.query.status.trim()) match.approvalStatus = req.query.status.trim()
+  if (typeof req.query.bookingId === 'string' && helper.isValidObjectId(req.query.bookingId)) match.createdBookingId = new mongoose.Types.ObjectId(req.query.bookingId)
+  if (typeof req.query.minConfidence === 'string' && !Number.isNaN(Number(req.query.minConfidence))) match.confidence = { $gte: Number(req.query.minConfidence) }
   const result = await BookingIntakeAudit.aggregate([
+    { $match: match },
     { $sort: { createdAt: -1, _id: 1 } },
     {
       $facet: {

@@ -48,6 +48,10 @@ const OperationsDashboard = () => {
               <Card><CardContent><Typography variant="h6">Booking statuses</Typography>{data.bookingStatuses.map((row) => <Typography key={row._id}>{row._id}: {row.count}</Typography>)}</CardContent></Card>
               <Card><CardContent><Typography variant="h6">AI rental types</Typography>{data.rentalTypes.length === 0 && <Typography color="text.secondary">No AI-created bookings recorded.</Typography>}{data.rentalTypes.map((row) => <Typography key={row._id}>{row._id || 'unspecified'}: {row.count}</Typography>)}</CardContent></Card>
             </Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 2 }}>
+              <Card><CardContent><Typography variant="h6">Upcoming maintenance</Typography>{data.maintenanceRows.length === 0 && <Typography color="text.secondary">No active maintenance.</Typography>}{data.maintenanceRows.map((row) => <Typography key={String(row._id)}>{String((row.vehicle as { name?: string })?.name || 'Vehicle')} — {String(row.status)} — {new Date(String(row.expectedCompletionDate)).toLocaleDateString()}</Typography>)}</CardContent></Card>
+              <Card><CardContent><Typography variant="h6">Document expiry warnings</Typography>{data.documentRows.length === 0 && <Typography color="text.secondary">No expiry warnings.</Typography>}{data.documentRows.map((row) => <Typography key={String(row._id)}>{String(row.type)} — {new Date(String(row.expiryDate)).toLocaleDateString()}</Typography>)}</CardContent></Card>
+            </Box>
           </>
         )}
       </div>

@@ -7,5 +7,6 @@ const routes = express.Router()
 
 routes.post(routeNames.create, authJwt.verifyToken, authJwt.authSupplier, maintenanceController.create)
 routes.get(routeNames.getByVehicle, authJwt.verifyToken, authJwt.authSupplier, maintenanceController.getByVehicle)
+routes.put(routeNames.update, authJwt.verifyToken, authJwt.authSupplier, maintenanceController.update)
 
 export default routes
