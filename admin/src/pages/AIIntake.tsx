@@ -12,13 +12,15 @@ const AIIntake = () => {
   const navigate = useNavigate()
   const [request, setRequest] = useState('')
   const [audit, setAudit] = useState<bookcarsTypes.BookingIntakeAudit>()
+  const [audits, setAudits] = useState<bookcarsTypes.BookingIntakeAudit[]>([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [correctedData, setCorrectedData] = useState<bookcarsTypes.BookingIntakeData>()
 
   const loadLatest = useCallback(async () => {
     try {
-      const data = await AIService.getAudits(1, 1)
+      const data = await AIService.getAudits(1, 20)
+      setAudits(data[0]?.resultData || [])
       const latest = data[0]?.resultData?.[0]
       setAudit(latest)
       setCorrectedData(latest?.correctedData || latest?.extractedData)
@@ -116,6 +118,20 @@ const AIIntake = () => {
         {audit && (
           <Card>
             <CardContent>
+              <Typography variant="h6">AI request history</Typography>
+              {audits.map((row) => (
+                <Button
+                  key={row._id}
+                  variant={row._id === audit._id ? 'contained' : 'text'}
+                  onClick={() => {
+                    setAudit(row)
+                    setCorrectedData(row.correctedData || row.extractedData)
+                  }}
+                  sx={{ mr: 1, mb: 1 }}
+                >
+                  {row.approvalStatus} · {new Date(row.createdAt).toLocaleDateString()}
+                </Button>
+              ))}
               <Typography variant="h6">Latest review</Typography>
               {correctedData && (
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>

@@ -29,6 +29,7 @@ import { strings as csStrings } from '@/lang/cars'
 import { strings } from '@/lang/create-booking'
 import * as UserService from '@/services/UserService'
 import * as BookingService from '@/services/BookingService'
+import * as AIService from '@/services/AIService'
 import * as helper from '@/utils/helper'
 import SupplierSelectList from '@/components/SupplierSelectList'
 import UserSelectList from '@/components/UserSelectList'
@@ -166,6 +167,9 @@ const CreateBooking = () => {
       })
 
       if (_booking && _booking._id) {
+        if (typeof location.state === 'object' && location.state && 'auditId' in location.state && typeof location.state.auditId === 'string') {
+          await AIService.markBookingCreated(location.state.auditId, _booking._id)
+        }
         navigate('/')
       } else {
         helper.error()

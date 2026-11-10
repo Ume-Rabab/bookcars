@@ -20,3 +20,6 @@ export const approveAudit = (id: string, correctedData: bookcarsTypes.BookingInt
 
 export const rejectAudit = (id: string, reason: string): Promise<bookcarsTypes.BookingIntakeAudit> =>
   axiosInstance.post(`/api/ai/booking-intake-audits/${encodeURIComponent(id)}/reject`, { reason }, { withCredentials: true }).then((res) => res.data)
+
+export const markBookingCreated = (id: string, bookingId: string): Promise<bookcarsTypes.BookingIntakeAudit> =>
+  axiosInstance.post(`/api/ai/booking-intake-audits/${encodeURIComponent(id)}/booking-created`, { bookingId }, { withCredentials: true }).then((res) => res.data)

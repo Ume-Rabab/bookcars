@@ -3,6 +3,7 @@ import type { Request, Response } from 'express'
 import { validateBookingIntakeRequest } from '../ai/bookingIntake'
 import { getBookingIntakeProvider } from '../ai/bookingIntakeProvider'
 import BookingIntakeAudit from '../models/BookingIntakeAudit'
+import Booking from '../models/Booking'
 import * as helper from '../utils/helper'
 
 export const bookingIntake = async (req: Request, res: Response) => {
@@ -113,6 +114,33 @@ export const rejectAudit = async (req: Request, res: Response) => {
   }
   audit.approvalStatus = 'rejected'
   audit.failureReason = typeof req.body?.reason === 'string' ? req.body.reason.trim().slice(0, 500) : 'Rejected by operator'
+  await audit.save()
+  res.json(audit)
+}
+
+export const markBookingCreated = async (req: Request, res: Response) => {
+  const auditId = String(req.params.id)
+  const bookingId = String(req.body?.bookingId || '')
+  if (!helper.isValidObjectId(auditId) || !helper.isValidObjectId(bookingId)) {
+    res.status(400).json({ message: 'Valid audit and booking IDs are required' })
+    return
+  }
+  const booking = await Booking.findById(bookingId).select('_id')
+  if (!booking) {
+    res.status(404).json({ message: 'Booking not found' })
+    return
+  }
+  const audit = await BookingIntakeAudit.findById(auditId)
+  if (!audit) {
+    res.status(404).json({ message: 'AI request not found' })
+    return
+  }
+  if (audit.approvalStatus !== 'approved') {
+    res.status(409).json({ message: 'AI request is not approved for booking linkage' })
+    return
+  }
+  audit.createdBookingId = booking._id
+  audit.approvalStatus = 'booking_created'
   await audit.save()
   res.json(audit)
 }

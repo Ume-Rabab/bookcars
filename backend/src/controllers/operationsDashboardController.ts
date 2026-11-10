@@ -38,7 +38,7 @@ export const get = async (_req: Request, res: Response) => {
     Car.countDocuments({ available: true, fullyBooked: false }),
     Booking.countDocuments({ status: { $in: activeStatuses } }),
     BookingIntakeAudit.countDocuments({ 'extractedData.rentalType': 'chauffeur', approvalStatus: 'booking_created' }),
-    BookingIntakeAudit.countDocuments({ 'extractedData.rentalType': 'airport_transfer', approvalStatus: 'booking_created' }),
+    BookingIntakeAudit.countDocuments({ 'extractedData.rentalType': 'airport-transfer', approvalStatus: 'booking_created' }),
     Maintenance.distinct('vehicle', { status: { $nin: ['completed', 'cancelled'] } }).then((vehicles) => vehicles.length),
     Maintenance.countDocuments({ startDate: { $gte: now }, status: { $nin: ['completed', 'cancelled'] } }),
     VehicleDocument.countDocuments({ expiryDate: { $lt: now } }),
