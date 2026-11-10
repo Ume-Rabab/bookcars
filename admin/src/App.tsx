@@ -47,6 +47,7 @@ const Pricing = lazy(() => import('@/pages/Pricing'))
 const AIIntake = lazy(() => import('@/pages/AIIntake'))
 const Maintenance = lazy(() => import('@/pages/Maintenance'))
 const VehicleDocuments = lazy(() => import('@/pages/VehicleDocuments'))
+const OperationsDashboard = lazy(() => import('@/pages/OperationsDashboard'))
 
 const AppLayout = () => {
   const location = useLocation()
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
       { path: 'ai-intake', element: <AIIntake /> },
       { path: 'maintenance', element: <Maintenance /> },
       { path: 'vehicle-documents', element: <VehicleDocuments /> },
+      { path: 'operations-dashboard', element: <OperationsDashboard /> },
       { path: '*', element: <NoMatch /> }
     ]
   }

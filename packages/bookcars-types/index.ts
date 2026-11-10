@@ -715,6 +715,26 @@ export interface VehicleDocument {
   updatedAt?: Date
 }
 
+export interface OperationsDashboard {
+  generatedAt: Date
+  totals: {
+    totalVehicles: number
+    availableVehicles: number
+    activeBookings: number
+    chauffeurBookings: number
+    airportBookings: number
+    maintenanceVehicles: number
+    upcomingMaintenance: number
+    expiredDocuments: number
+    expiringDocuments: number
+    pendingAiApprovals: number
+    approvedAiBookings: number
+    revenue: number
+  }
+  bookingStatuses: Array<{ _id: string, count: number }>
+  rentalTypes: Array<{ _id?: string, count: number }>
+}
+
 // 
 // React types
 //
