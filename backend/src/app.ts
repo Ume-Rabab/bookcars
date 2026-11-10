@@ -21,6 +21,7 @@ import ipinfoRoutes from './routes/ipinfoRoutes'
 import bankDetailsRoutes from './routes/bankDetailsRoutes'
 import settingRoutes from './routes/settingRoutes'
 import aiRoutes from './routes/aiRoutes'
+import maintenanceRoutes from './routes/maintenanceRoutes'
 import * as helper from './utils/helper'
 
 const app = express()
@@ -68,6 +69,7 @@ app.use('/', ipinfoRoutes)
 app.use('/', bankDetailsRoutes)
 app.use('/', settingRoutes)
 app.use('/', aiRoutes)
+app.use('/', maintenanceRoutes)
 
 if (env.ENABLE_SENTRY) {
   Sentry.setupExpressErrorHandler(app)

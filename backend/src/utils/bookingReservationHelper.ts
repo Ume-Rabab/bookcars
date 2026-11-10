@@ -3,6 +3,7 @@ import * as bookcarsTypes from ':bookcars-types'
 import * as env from '../config/env.config'
 import Booking from '../models/Booking'
 import Car from '../models/Car'
+import Maintenance from '../models/Maintenance'
 
 /**
  * Booking reservation statuses.
@@ -123,27 +124,36 @@ export const saveBookingsWithAvailability = async (bookings: env.Booking[], opti
 
     for (const booking of reservingBookings) {
       const carId = booking.car.toString()
-      if (!blockingCars.has(carId)) {
-        continue
+      if (blockingCars.has(carId)) {
+        const query = Booking.findOne({
+          _id: { $nin: bookingIds },
+          car: new mongoose.Types.ObjectId(carId),
+          from: { $lt: booking.to },
+          to: { $gt: booking.from },
+          $or: [
+            { status: { $in: BOOKING_RESERVATION_STATUSES } },
+            { status: bookcarsTypes.BookingStatus.Void, expireAt: { $gt: now } },
+          ],
+        }).select('_id').lean()
+
+        if (session) {
+          query.session(session)
+        }
+        const conflict = await query
+
+        if (conflict) {
+          throw new BookingConflictError()
+        }
       }
 
-      const query = Booking.findOne({
-        _id: { $nin: bookingIds },
-        car: new mongoose.Types.ObjectId(carId),
-        from: { $lt: booking.to },
-        to: { $gt: booking.from },
-        $or: [
-          { status: { $in: BOOKING_RESERVATION_STATUSES } },
-          { status: bookcarsTypes.BookingStatus.Void, expireAt: { $gt: now } },
-        ],
+      const maintenanceConflict = await Maintenance.findOne({
+        vehicle: new mongoose.Types.ObjectId(carId),
+        startDate: { $lt: booking.to },
+        expectedCompletionDate: { $gt: booking.from },
+        status: { $nin: ['completed', 'cancelled'] },
       }).select('_id').lean()
 
-      if (session) {
-        query.session(session)
-      }
-      const conflict = await query
-
-      if (conflict) {
+      if (maintenanceConflict) {
         throw new BookingConflictError()
       }
     }

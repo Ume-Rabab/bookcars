@@ -679,6 +679,27 @@ export interface BookingIntakeAudit {
   updatedAt: Date
 }
 
+export type MaintenanceStatus = 'reported' | 'scheduled' | 'in_progress' | 'completed' | 'cancelled'
+export type MaintenanceType = 'oil_change' | 'tire_service' | 'engine_service' | 'registration_renewal' | 'insurance_renewal' | 'fitness_renewal' | 'accident_repair' | 'general_inspection'
+
+export interface Maintenance {
+  _id?: string
+  vehicle: string
+  reportedBy: string
+  supplier?: string
+  type: MaintenanceType
+  description?: string
+  status: MaintenanceStatus
+  startDate: Date
+  expectedCompletionDate: Date
+  completedDate?: Date
+  mileage?: number
+  cost?: number
+  notes?: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
 // 
 // React types
 //

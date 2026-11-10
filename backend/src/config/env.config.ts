@@ -954,6 +954,24 @@ export interface BookingIntakeAudit extends Document {
   updatedAt: Date
 }
 
+export interface Maintenance extends Document {
+  _id: Types.ObjectId
+  vehicle: Types.ObjectId
+  reportedBy: Types.ObjectId
+  supplier: Types.ObjectId
+  type: bookcarsTypes.MaintenanceType
+  description?: string
+  status: bookcarsTypes.MaintenanceStatus
+  startDate: Date
+  expectedCompletionDate: Date
+  completedDate?: Date
+  mileage?: number
+  cost?: number
+  notes?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 /**
  * NotificationCounter Document.
  *
