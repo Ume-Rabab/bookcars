@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   FormControl,
   Button,
@@ -8,7 +8,8 @@ import {
   Switch,
   FormHelperText,
   InputLabel,
-  Input
+  Input,
+  Alert
 } from '@mui/material'
 import {
   Info as InfoIcon,
@@ -43,6 +44,8 @@ import '@/assets/css/create-booking.css'
 
 const CreateBooking = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const aiBookingData = (location.state as { aiBookingData?: bookcarsTypes.BookingIntakeData } | null)?.aiBookingData
 
   const [isSupplier, setIsSupplier] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -86,6 +89,17 @@ const CreateBooking = () => {
   const from = useWatch({ control, name: 'from' })
   const to = useWatch({ control, name: 'to' })
   const additionalDriverEnabled = useWatch({ control, name: 'additionalDriver' })
+
+  useEffect(() => {
+    if (aiBookingData?.startDate) {
+      const start = new Date(`${aiBookingData.startDate}T09:00:00`)
+      if (!Number.isNaN(start.getTime())) setValue('from', start)
+    }
+    if (aiBookingData?.endDate) {
+      const end = new Date(`${aiBookingData.endDate}T09:00:00`)
+      if (!Number.isNaN(end.getTime())) setValue('to', end)
+    }
+  }, [aiBookingData, setValue])
 
   useEffect(() => {
     if (from) {
@@ -177,6 +191,13 @@ const CreateBooking = () => {
       <div className="create-booking">
         <Paper className="booking-form booking-form-wrapper" elevation={10} style={visible ? {} : { display: 'none' }}>
           <h1 className="booking-form-title">{strings.NEW_BOOKING_HEADING}</h1>
+          {aiBookingData && (
+            <Alert severity="info">
+              AI-approved draft loaded. Confirm supplier, customer, locations, vehicle, dates, and pricing before submitting.
+              {aiBookingData.pickupLocation && ` Pickup: ${aiBookingData.pickupLocation}.`}
+              {aiBookingData.dropoffLocation && ` Drop-off: ${aiBookingData.dropoffLocation}.`}
+            </Alert>
+          )}
           <form onSubmit={handleSubmit(onSubmit)}>
             {!isSupplier && (
               <FormControl fullWidth margin="dense">

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Alert, Box, Button, Card, CardContent, CircularProgress, TextField, Typography } from '@mui/material'
 import * as bookcarsTypes from ':bookcars-types'
 import Layout from '@/components/Layout'
@@ -8,6 +9,7 @@ import * as helper from '@/utils/helper'
 import '@/assets/css/ai-intake.css'
 
 const AIIntake = () => {
+  const navigate = useNavigate()
   const [request, setRequest] = useState('')
   const [audit, setAudit] = useState<bookcarsTypes.BookingIntakeAudit>()
   const [loading, setLoading] = useState(false)
@@ -65,7 +67,8 @@ const AIIntake = () => {
       }
       const updated = await AIService.approveAudit(audit._id, approvalData)
       setAudit(updated)
-      setMessage('Approved for normal booking workflow. No booking was created automatically.')
+      setMessage('Approved for normal booking workflow. Opening the booking form for final operator validation.')
+      navigate('/create-booking', { state: { aiBookingData: approvalData, auditId: audit._id } })
     } catch (error) {
       helper.error(error)
     }
